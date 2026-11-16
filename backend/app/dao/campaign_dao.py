@@ -1,7 +1,8 @@
 import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.app.models import Campaign, EditSession
+from sqlalchemy.orm import selectinload
+from app.models import Campaign, EditSession, Stream
 
 
 class CampaignDAO:
@@ -15,8 +16,11 @@ class CampaignDAO:
         stmt = (
             select(Campaign)
             .where(Campaign.id == cid)
+            .options(
+                selectinload(Campaign.streams).selectinload(Stream.offers)
+            )
         )
-        return (await self.s.execute(stmt)).unique().scalar_one_or_none()
+        return (await self.s.execute(stmt)).scalar_one_or_none()
 
     async def list(self) -> list[Campaign]:
         return list((await self.s.execute(select(Campaign).order_by(Campaign.created_at.desc()))).scalars())
@@ -27,7 +31,10 @@ class CampaignDAO:
     async def active_draft_session(self, cid: uuid.UUID) -> EditSession | None:
         stmt = (
             select(EditSession)
-            .where(EditSession.campaign_id == cid, EditSession.status == "draft")
+            .where(
+                EditSession.campaign_id == cid,
+                EditSession.status.in_(["draft", "failed"])
+            )
             .order_by(EditSession.created_at.desc())
             .limit(1)
         )

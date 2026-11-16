@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from backend.app.models import Stream, StreamOffer
+from app.models import Stream, StreamOffer
 
 
 class StreamDAO:
@@ -37,5 +37,5 @@ class StreamDAO:
     def add_offer(self, o: StreamOffer) -> None:
         self.s.add(o)
 
-    def delete_offer(self, o: StreamOffer) -> None:
-        self.s.delete(o)
+    async def delete_offer(self, o: StreamOffer) -> None:
+        await self.s.delete(o)

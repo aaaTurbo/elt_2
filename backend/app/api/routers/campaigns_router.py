@@ -1,8 +1,8 @@
 import uuid
 from fastapi import APIRouter, Depends
-from deps import get_campaign_service
-from schemas import CampaignOut, CreateCampaignIn
-from backend.app.services.campaign_service import CampaignService
+from ..deps import get_campaign_service
+from ..schemas import CampaignOut, CreateCampaignIn
+from app.services.campaign_service import CampaignService
 
 router = APIRouter(prefix="/campaigns", tags=["campaigns"])
 
@@ -16,6 +16,7 @@ async def create(
         name=body.name,
         geo_code=body.geo_code,
         offer_id=body.offer_id,
+        offer_name=body.offer_name,
         domain=body.domain,
         group_id=body.group_id,
         source_id=body.source_id,

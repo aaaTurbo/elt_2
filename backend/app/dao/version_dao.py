@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.app.models import CampaignVersion
+from app.models import CampaignVersion
 
 
 class VersionDAO:
