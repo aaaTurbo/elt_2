@@ -1,4 +1,3 @@
-# backend/app/keitaro/gateway.py
 
 import re
 import logging

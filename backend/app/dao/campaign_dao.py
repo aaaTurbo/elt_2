@@ -16,7 +16,6 @@ class CampaignDAO:
         stmt = (
             select(Campaign)
             .where(Campaign.id == cid)
-            # Явно подгружаем потоки и их офферы
             .options(
                 selectinload(Campaign.streams).selectinload(Stream.offers)
             )
@@ -34,7 +33,6 @@ class CampaignDAO:
             select(EditSession)
             .where(
                 EditSession.campaign_id == cid,
-                # Ищем и активные черновики, и те, где упал пуш
                 EditSession.status.in_(["draft", "failed"])
             )
             .order_by(EditSession.created_at.desc())

@@ -18,18 +18,14 @@ class PushService:
         if not c:
             raise NotFoundError("Campaign not found")
 
-        # Если сессии нет (первичный пуш) — создаем её, чтобы не падать
         session = await self.uow.campaigns.active_draft_session(campaign_id)
         if session is None:
             session = EditSession(campaign_id=campaign_id, status="draft")
             self.uow.campaigns.add_session(session)
             await self.uow.session.flush()
 
-        # Загружаем кампанию ВМЕСТЕ со стримами и офферами
         c = await self.uow.campaigns.get_with_streams(campaign_id)
 
-        # c.streams уже подгружены благодаря selectinload.
-        # Присваивание c.streams = ... больше не нужно и вызывает ошибку.
         streams = c.streams
 
         log_rec = KeitaroPushLog(
@@ -56,13 +52,11 @@ class PushService:
             await self.uow.commit()
             raise KeitaroError(f"Push failed: {e}") from e
 
-        # Сохраняем KT ID
         c.keitaro_campaign_id = kt_cid
         for s in streams:
             if s.id.int in kt_stream_ids:
                 s.keitaro_stream_id = kt_stream_ids[s.id.int]
 
-        # Новая версия
         version_number = await self.uow.versions.next_version_number(c.id)
         version = CampaignVersion(
             campaign_id=c.id,

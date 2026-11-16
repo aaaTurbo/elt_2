@@ -28,5 +28,4 @@ async def test_cache_hit():
     await cat.search("")
     await cat.search("x")
     await cat.search("1")
-    # закешировано — клиент дёрнут ровно один раз
     assert client.list_offers.await_count == 1

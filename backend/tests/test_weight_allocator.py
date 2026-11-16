@@ -26,8 +26,6 @@ def test_recalculate_proportional(allocator):
 
     offers.remove(o1)
     allocator.recalculate(offers)
-
-    # Остаток (100) распределяется как 30:50 (3:5)
     assert o2.weight == Decimal("37.50")
     assert o3.weight == Decimal("62.50")
     assert o2.weight + o3.weight == Decimal("100.00")
@@ -35,14 +33,12 @@ def test_recalculate_proportional(allocator):
 
 def test_recalculate_with_fixed(allocator):
     """Зафиксированные офферы не меняются, остальные делят остаток."""
-    # Сумма изначально 110, чтобы вызвать пересчёт
     o1, o2, o3 = make_offer(30, fixed=True), make_offer(40), make_offer(40)
     offers = [o1, o2, o3]
 
     allocator.recalculate(offers)
 
-    assert o1.weight == Decimal("30.00")  # Зафиксирован
-    # Остаток 70. Делим пропорционально 40:40 -> по 35
+    assert o1.weight == Decimal("30.00")
     assert o2.weight == Decimal("35.00")
     assert o3.weight == Decimal("35.00")
     assert o1.weight + o2.weight + o3.weight == Decimal("100.00")
@@ -52,8 +48,6 @@ def test_fixed_sum_exceeds_100(allocator):
     """Ошибка, если сумма фиксированных весов больше 100."""
     o1, o2 = make_offer(60, fixed=True), make_offer(50, fixed=True)
     offers = [o1, o2]
-
-    # Исправлено регулярное выражение
     with pytest.raises(ValidationError, match=r"exceeds 100%"):
         allocator.recalculate(offers)
 

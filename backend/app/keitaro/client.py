@@ -80,7 +80,7 @@ class KeitaroClient:
     async def create_stream(self, payload: dict) -> int:
         if self.mock:
             return self._next_id()
-        data = await self._request("POST", "streams", json=payload)  # <-- Правильный путь
+        data = await self._request("POST", "streams", json=payload)
         return int(data["id"])
 
     async def update_stream(self, campaign_id: int, stream_id: int, payload: dict) -> None:

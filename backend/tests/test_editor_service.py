@@ -27,9 +27,9 @@ async def test_add_offer_success(mock_uow):
     stream.offers = [existing_offer]
 
     mock_uow.campaigns.get = AsyncMock(return_value=campaign)
-    mock_uow.campaigns.get_with_streams = AsyncMock(return_value=campaign)  # <-- Добавлено
+    mock_uow.campaigns.get_with_streams = AsyncMock(return_value=campaign)
     mock_uow.streams.get = AsyncMock(return_value=stream)
-    mock_uow.streams.by_campaign = AsyncMock(return_value=[stream])  # <-- Добавлено для get_state
+    mock_uow.streams.by_campaign = AsyncMock(return_value=[stream])
     mock_uow.campaigns.active_draft_session = AsyncMock(return_value=None)
 
     mock_uow.streams.add_offer.side_effect = lambda offer: stream.offers.append(offer)

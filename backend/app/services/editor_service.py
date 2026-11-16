@@ -13,8 +13,6 @@ class EditorService:
         self.uow = uow
         self.allocator = WeightAllocator()
 
-    # ---------- sessions ----------
-
     async def _ensure_draft(self, campaign: Campaign) -> EditSession:
         session = await self.uow.campaigns.active_draft_session(campaign.id)
         if session is None:
@@ -35,8 +33,6 @@ class EditorService:
 
         return await self.get_state(campaign_id)
 
-    # ---------- state ----------
-
     async def get_state(self, campaign_id: uuid.UUID) -> dict:
         c = await self.uow.campaigns.get_with_streams(campaign_id)
         if not c:
@@ -54,7 +50,7 @@ class EditorService:
                     if not o.name and o.keitaro_offer_id in name_map:
                         o.name = name_map[o.keitaro_offer_id]
         except Exception as e:
-            pass  # Если каталог упал, просто не обогащаем именами
+            pass
 
         session = await self.uow.campaigns.active_draft_session(campaign_id)
         res = self._serialize(c, streams)
@@ -97,8 +93,6 @@ class EditorService:
                 for s in streams
             ],
         }
-
-    # ---------- mutations ----------
 
     async def add_offer(
         self, campaign_id: uuid.UUID, stream_id: uuid.UUID, keitaro_offer_id: int, name: str | None
@@ -198,8 +192,6 @@ class EditorService:
         await self.uow.commit()
         return await self.get_state(campaign_id)
 
-    # ---------- helpers ----------
-
     async def _get_campaign(self, cid: uuid.UUID) -> Campaign:
         c = await self.uow.campaigns.get(cid)
         if not c:
@@ -216,8 +208,6 @@ class EditorService:
         s = await self.uow.streams.get(stream_id)
         assert s is not None
         return s.offers
-
-    # ---------- fetch from KT ----------
 
     async def fetch_from_kt(self, campaign_id: uuid.UUID, kt_client) -> dict:
         """Keitaro - ведущий источник. Синхронизирует веса, статусы и удаления."""
@@ -237,7 +227,6 @@ class EditorService:
             if not kt_s:
                 continue
 
-            # Собираем только активные офферы по строгому ключу offer_id
             kt_offers: dict[int, dict] = {}
             for o in kt_s.get("offers", []):
                 if o.get("offer_id") is not None and o.get("state", "active") == "active":
@@ -245,7 +234,6 @@ class EditorService:
 
             existing_kt_ids: set[int] = set()
 
-            # 1. Обновляем существующие в нашей БД офферы
             for o in s.offers:
                 existing_kt_ids.add(o.keitaro_offer_id)
                 if o.keitaro_offer_id in kt_offers:
@@ -262,7 +250,6 @@ class EditorService:
                         o.deleted_in_kt_at = datetime.now(timezone.utc)
                     o.weight = Decimal("0")
 
-            # 2. Добавляем офферы, которые завели напрямую в Keitaro
             for kt_offer_id, kt_offer in kt_offers.items():
                 if kt_offer_id not in existing_kt_ids:
                     share = kt_offer.get("share", 0)
