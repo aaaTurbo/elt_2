@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-adrobot}
+      POSTGRES_USER: ${POSTGRES_USER:-adrobot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-adrobot}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-adrobot}"]
+      interval: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    env_file: .env
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
