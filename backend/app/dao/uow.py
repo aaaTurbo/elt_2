@@ -1,9 +1,9 @@
 from types import TracebackType
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
-from backend.app.dao.campaign import CampaignDAO
-from app.dao.stream import StreamDAO
-from app.dao.version import VersionDAO
-from app.dao.push_log import PushLogDAO
+from app.dao.campaign_dao import CampaignDAO
+from app.dao.stream_dao import StreamDAO
+from app.dao.version_dao import VersionDAO
+from app.dao.push_log_dao import PushLogDAO
 
 
 class UnitOfWork:

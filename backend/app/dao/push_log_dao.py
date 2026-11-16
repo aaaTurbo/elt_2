@@ -1,6 +1,5 @@
-import uuid
 from sqlalchemy.ext.asyncio import AsyncSession
-from backend.app.models import KeitaroPushLog
+from app.models import KeitaroPushLog
 
 
 class PushLogDAO:
