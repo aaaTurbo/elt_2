@@ -1,7 +1,7 @@
 import uuid
 import logging
 from app.dao.uow import UnitOfWork
-from app.exceptions import ConflictError, KeitaroError, NotFoundError
+from app.exceptions import KeitaroError, NotFoundError
 from app.keitaro.gateway import KeitaroGateway
 from app.models import CampaignVersion, KeitaroPushLog, EditSession
 

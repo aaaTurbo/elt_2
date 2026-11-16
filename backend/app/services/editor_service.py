@@ -49,7 +49,7 @@ class EditorService:
                 for o in s.offers:
                     if not o.name and o.keitaro_offer_id in name_map:
                         o.name = name_map[o.keitaro_offer_id]
-        except Exception as e:
+        except Exception:
             pass
 
         session = await self.uow.campaigns.active_draft_session(campaign_id)

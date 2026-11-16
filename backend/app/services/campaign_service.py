@@ -27,15 +27,9 @@ class CampaignService:
             group_id=group_id or settings.keitaro_group_id_default,
             source_id=source_id or settings.keitaro_source_id_default,
         )
-        s1 = Stream(
-            campaign=c,
-            type="redirect",
-            redirect_url=settings.google_redirect_url,
-            position=0,
-        )
-        s2 = Stream(campaign=c, type="flow", position=1)
+        s = Stream(campaign=c, type="flow", position=1)
         StreamOffer(
-            stream=s2,
+            stream=s,
             keitaro_offer_id=offer_id,
             name=offer_name,
             weight=Decimal("100.00"),
