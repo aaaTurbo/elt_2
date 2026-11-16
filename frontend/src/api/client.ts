@@ -15,6 +15,9 @@ export type Campaign = {
 
 export type Offer = {
   id: string;
+  name: string | null;
+  description: string | null;
+  price: number | null;
   keitaro_offer_id: number;
   weight: number;
   is_weight_fixed: boolean;
@@ -31,4 +34,21 @@ export type Stream = {
   offers: Offer[];
 };
 
-export type EditorState = { campaign: Campaign; streams: Stream[] };
+export type EditorState = { campaign: Campaign; streams: Stream[], has_draft?: boolean };
+
+import { message } from 'antd';
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const detail = error?.response?.data?.detail;
+
+    if (error.response?.status >= 500) {
+      message.error(detail || 'Server error. Please check backend logs.');
+    } else if (error.code === 'ERR_NETWORK') {
+      message.error('Network error. Is the backend running?');
+    }
+
+    return Promise.reject(error);
+  }
+);
