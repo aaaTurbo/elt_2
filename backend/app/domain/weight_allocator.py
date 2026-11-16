@@ -20,7 +20,7 @@ class WeightAllocator:
     """
 
     def recalculate(self, offers: list[StreamOffer]) -> None:
-        """Полный пересчёт (после удаления оффера, смены fixed-флага и т.п.)."""
+
         active = [o for o in offers if not o.is_deleted_in_kt]
         fixed = [o for o in active if o.is_weight_fixed]
         free = [o for o in active if not o.is_weight_fixed]
@@ -55,7 +55,7 @@ class WeightAllocator:
     def allocate_for_new(
         self, offers: list[StreamOffer], new_offer: StreamOffer
     ) -> None:
-        """Добавление нового free-оффера (или rollback удалённого в KT)."""
+
         active_others = [
             o for o in offers
             if o is not new_offer and not o.is_deleted_in_kt
@@ -85,7 +85,7 @@ class WeightAllocator:
         self._normalize(fixed + free + [new_offer])
 
     def _normalize(self, active: list[StreamOffer]) -> None:
-        """Округление до 2 знаков; дрейф гасится на последнем оффере."""
+
         total = Decimal("0")
         for i, o in enumerate(active):
             if i == len(active) - 1:

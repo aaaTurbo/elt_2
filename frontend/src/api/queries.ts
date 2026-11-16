@@ -105,7 +105,7 @@ export const useFetchKt = (id: string) => {
 export const useDiscard = (id: string) => {
   const qc = useQueryClient();
   return useMutation({
-    // Обязательно указываем <EditorState>, чтобы принять новые данные
+
     mutationFn: () => api.post<EditorState>(`/campaigns/${id}/editor/discard`).then((r) => r.data),
     onSuccess: (data) => {
       qc.setQueryData(['editor', id], data);

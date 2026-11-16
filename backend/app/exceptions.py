@@ -1,5 +1,5 @@
 class DomainError(Exception):
-    """Бизнес-ошибка, ожидаемая и обрабатываемая на уровне API."""
+
 
 
 class NotFoundError(DomainError):

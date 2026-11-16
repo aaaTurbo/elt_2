@@ -31,7 +31,7 @@ export default function EditorPage() {
         <div
             className="page"
             style={{
-                // Меняем цвет фона на светло-желтый, если есть несохраненные изменения
+
                 backgroundColor: data.has_draft ? '#fffbe6' : '#f5f5f5',
                 transition: 'background-color 0.3s ease',
                 minHeight: '100vh',
@@ -245,7 +245,7 @@ function StreamCard({campaignId, stream}: { campaignId: string; stream: Stream }
 }
 
 function AddOfferBlock({campaignId, streamId}: { campaignId: string; streamId: string }) {
-    const [selectedOffer, setSelectedOffer] = useState<KtOffer | null>(null); // <-- Храним объект
+    const [selectedOffer, setSelectedOffer] = useState<KtOffer | null>(null);
     const add = useAddOffer(campaignId);
 
     return (
@@ -258,7 +258,7 @@ function AddOfferBlock({campaignId, streamId}: { campaignId: string; streamId: s
                 onClick={() => {
                     if (!selectedOffer) return;
                     add.mutate(
-                        {streamId, offerId: selectedOffer.id, name: selectedOffer.name}, // <-- Передаем name
+                        {streamId, offerId: selectedOffer.id, name: selectedOffer.name},
                         {
                             onSuccess: () => {
                                 setSelectedOffer(null);

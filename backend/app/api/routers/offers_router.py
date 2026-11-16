@@ -22,6 +22,6 @@ async def search_offers(
 async def refresh_offers(
     svc: OfferCatalogService = Depends(get_offer_catalog_service),
 ):
-    """Принудительно перезагрузить каталог из Keitaro."""
+
     count = await svc.refresh()
     return {"ok": True, "count": count}

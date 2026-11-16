@@ -4,7 +4,7 @@ import { useOfferSearch, KtOffer } from '../api/queries';
 
 interface Props {
   value?: KtOffer | null;
-  onChange?: (offer: KtOffer | null) => void; // <-- Теперь необязательный
+  onChange?: (offer: KtOffer | null) => void;
   placeholder?: string;
 }
 

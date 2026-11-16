@@ -20,7 +20,7 @@ def allocator():
 
 
 def test_recalculate_proportional(allocator):
-    """Удаление оффера перераспределяет его вес пропорционально между оставшимися."""
+    
     o1, o2, o3 = make_offer(20), make_offer(30), make_offer(50)
     offers = [o1, o2, o3]
 
@@ -32,7 +32,7 @@ def test_recalculate_proportional(allocator):
 
 
 def test_recalculate_with_fixed(allocator):
-    """Зафиксированные офферы не меняются, остальные делят остаток."""
+    
     o1, o2, o3 = make_offer(30, fixed=True), make_offer(40), make_offer(40)
     offers = [o1, o2, o3]
 
@@ -45,7 +45,7 @@ def test_recalculate_with_fixed(allocator):
 
 
 def test_fixed_sum_exceeds_100(allocator):
-    """Ошибка, если сумма фиксированных весов больше 100."""
+    
     o1, o2 = make_offer(60, fixed=True), make_offer(50, fixed=True)
     offers = [o1, o2]
     with pytest.raises(ValidationError, match=r"exceeds 100%"):
@@ -53,7 +53,7 @@ def test_fixed_sum_exceeds_100(allocator):
 
 
 def test_allocate_for_new(allocator):
-    """Добавление нового оффера забирает равную долю у остальных."""
+    
     o1, o2 = make_offer(50), make_offer(50)
     offers = [o1, o2]
     new_offer = make_offer(0)
@@ -67,7 +67,7 @@ def test_allocate_for_new(allocator):
 
 
 def test_allocate_for_new_with_fixed(allocator):
-    """Добавление нового оффера при наличии фиксированных."""
+    
     o1 = make_offer(40, fixed=True)
     o2 = make_offer(60)
     new_offer = make_offer(0)
@@ -80,7 +80,7 @@ def test_allocate_for_new_with_fixed(allocator):
 
 
 def test_recalculate_ignores_deleted(allocator):
-    """Удаленные в KT офферы не участвуют в расчете."""
+    
     o1, o2, o3 = make_offer(50), make_offer(50), make_offer(0, deleted=True)
     offers = [o1, o2, o3]
 

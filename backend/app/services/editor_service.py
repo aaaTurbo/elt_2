@@ -210,7 +210,7 @@ class EditorService:
         return s.offers
 
     async def fetch_from_kt(self, campaign_id: uuid.UUID, kt_client) -> dict:
-        """Keitaro - ведущий источник. Синхронизирует веса, статусы и удаления."""
+
         c = await self._get_campaign(campaign_id)
         if c.keitaro_campaign_id is None:
             raise ConflictError("Campaign has not been pushed to Keitaro yet")
